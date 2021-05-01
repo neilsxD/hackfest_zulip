@@ -190,8 +190,7 @@ function ReadJsonFile(fileName){
     //console.log(fileName);
     fs.readFile(fileName, function(err, data) {
             if(err) return 0 ;
-            var fileData=JSON.parse(data);
-            return  fileData; 
+            var fileData=JSON.parse(data); 
             var len=fileData.length;
             
             for(var i=0;i<len;i++){
