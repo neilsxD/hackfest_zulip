@@ -23,8 +23,8 @@ function fileCreator(emailId,Key,userId, urls){
 }
 
 
-async function pattern_register_bot(message_list  ) {
-    message = message_list.content ;
+function pattern_register_bot(message_list) {
+    message = extractContent(message_list.content) ;
     value =    "/register_bot " 
     if( message.length >= value.length)
     {   var pos = 1 ;
@@ -45,7 +45,7 @@ async function pattern_register_bot(message_list  ) {
 
         // we dont have the time for it 
         //console.log(message_true ) ; 
-        fileCreator(message.sender_email , message_true,  message.sender_id , message.sender_realm_str) ; 
+        fileCreator(message_list.sender_email , message_true,  message_list.sender_id , message_list.sender_realm_str) ; 
 
 
         return 1 ; 
@@ -84,12 +84,12 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
 
 
 // pattern for the message_schedule
-async function pattern_schedule(message_list  ) {
+ function pattern_schedule(message_list  ) {
    // console.log(message_list) ; 
 
-    messagesf = message_list.content ;
+    messagesf = extractContent(message_list.content) ;
     message = messagesf ; 
-    console.log(message) ; 
+    //console.log(message) ; 
 
     // message_schedule to topic time> <---message--->
     value =    "message_schedule "  ;
@@ -102,7 +102,7 @@ async function pattern_schedule(message_list  ) {
             {   if(value[i] != message[i])
                 {
                     
-                    console.log(value[i]) ;
+                    //console.log(value[i]) ;
 
                     pos = 0 ;
                     break  ;
@@ -177,7 +177,7 @@ async function pattern_schedule(message_list  ) {
         else 
         type = "stream" ; 
 
-        findJson(message , messagesf.sender_id , type  , to , topic , time ) ;
+        findJson(message , message_list.sender_id , type  ,message_list.recipient_id , topic , time ) ;
          
 /*
         var current = await new Date();
@@ -210,13 +210,15 @@ var dict = {
     //pattern_schedule(dict ) ; 
     //pattern_register_bot(dict2) ;
 
-    function extractContent(s) {
-        var span = document.createElement('span');
-        span.innerHTML = s;
-        return span.textContent || span.innerText;
-      };
-
-
+    const { htmlToText } = require('html-to-text');
+    
+    function extractContent(content){
+        const text = htmlToText(content, {
+            wordwrap: null
+            });
+            
+           return text;
+    }
 
 
 (async () => {
@@ -260,15 +262,16 @@ var dict = {
             
             registration =await client.messages.retrieve(reg_parameter);
             
-            for( i in registration.messages )
+           // console.log(registration.messages);
+            for( var i=0;i<registration.messages.length;i++)
             {
-                 //    pattern_register_bot(i) ;
+                pattern_register_bot(registration.messages[i]) ;
                 
             }
             for(var i = 0 ; i < prevMsgData.messages.length  ; i++ )
             {
                       
-                console.log(extractContent(prevMsgData.messages[i].content   ) ) ;
+                pattern_schedule(prevMsgData.messages[i])  ;
 
     //   pattern_schedule(prevMsgData.messages[i]) ; 
             }

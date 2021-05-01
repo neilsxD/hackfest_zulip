@@ -1,0 +1,4 @@
+[api]
+email=Jayantanand123456789@gmail.com
+key=sadds
+site=https://hackfestwinner.zulipchat.com
