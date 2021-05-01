@@ -3,11 +3,51 @@ var fs = require('fs');
 const zulipInit = require("zulip-js");
 
 
+
+async function sends(message , sender_id , type , receiver_id , topic = null ){
+    
+    const config_id = await { zuliprc: sender_id }; // the document will be in the form of the sender id
+    const client = await   zulipInit(config_id);
+
+
+    let params = {} ; 
+    if(type == 'private' )
+    {
+        params = {
+            to: [receiver_id],
+            type: "private",
+            content: message ,
+        };
+        console.log(await client.messages.send(params));
+
+    
+
+
+    }else {
+
+
+
+        params = {
+            to: receiver_id  ,
+            type: "stream",
+            topic: topic,
+            content: message,
+        };
+        
+     console.log(await client.messages.send(params));
+
+
+    }
+
+
+
+
+}
+
+
+
 // Pass the path to your zuliprc file here.
 const config_bot = { zuliprc: "zuliprc" };
-
-
-
 
 function fileCreator(emailId,Key,userId, urls){
     
@@ -186,15 +226,17 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
 
 var fs = require('fs');
 
-function ReadJsonFile(fileName){
+async  function ReadJsonFile(fileName){
     //console.log(fileName);
     fs.readFile(fileName, function(err, data) {
-            if(err) return 0 ;
-            var fileData=JSON.parse(data); 
+            if(err) throw err ;
+            var fileData=JSON.parse(data);
             var len=fileData.length;
-            
+//            console.log(fileData) ; 
+
+
             for(var i=0;i<len;i++){
-                console.log(fileData[i].message);
+              //  sends(fileData[i].message , fileData[i].sender_id , fileData[i].type , fileData[i].receiver_id , fileData[i].topic ) ;
             }
       });
 }
@@ -255,20 +297,9 @@ function time_checker() {
 
 
 
-
-
-
 time_checker() ; 
 
-
-
-
-
-
-
-
-
-
+send(409206, "stream" , "667041" , "topic" , "")
 
 
 
@@ -291,6 +322,7 @@ var dict = {
     //pattern_register_bot(dict2) ;
 
     const { htmlToText } = require('html-to-text');
+const { send } = require('process');
     
     function extractContent(content){
         const text = htmlToText(content, {
