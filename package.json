@@ -5,6 +5,7 @@
   "main": "bot.js",
   "dependencies": {
     "firebase": "^8.4.3",
+    "html-to-text": "^7.1.1",
     "zulip-js": "^2.0.9"
   },
   "devDependencies": {},

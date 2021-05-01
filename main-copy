@@ -230,14 +230,34 @@ async  function ReadJsonFile(fileName){
     //console.log(fileName);
     fs.readFile(fileName, function(err, data) {
             if(err) throw err ;
-            var fileData=JSON.parse(data);
-            var len=fileData.length;
-//            console.log(fileData) ; 
+            var fileData= JSON.parse(data , function(fileData){
+                    console.log('asd') ;
+                    var len=fileData.length;
+
+
+                    for(var i=0;i<len;i++){
+                        var message_list = fileData[i].message ; 
+                       sends(fileData[i].message , fileData[i].sender_id , fileData[i].type , fileData[i].receiver_id , fileData[i].topic ) ;
+                    }
+                
+                
+                })  ; 
+            
+            /*        var len=fileData.length;
 
 
             for(var i=0;i<len;i++){
-              //  sends(fileData[i].message , fileData[i].sender_id , fileData[i].type , fileData[i].receiver_id , fileData[i].topic ) ;
+               // console.log(  fileData[i].message);
+                var message_list = fileData[i].message ; 
+                //console.log(fileData[i].message) ;
+                //console.log( fileData[i].sender_id) ;
+                //console.log(fileData[i].type) ;
+                //console.log( fileData[i].receiver_id) ;
+                // console.log(fileData[i].topic) ;
+               sends(fileData[i].message , fileData[i].sender_id , fileData[i].type , fileData[i].receiver_id , fileData[i].topic ) ;
             }
+            */
+
       });
 }
 
@@ -245,7 +265,7 @@ function time_checker() {
         var current =  new Date();
         // dd-mm-yyyy-mm-hh
         var dd = current.getDate() ; 
-        var mm = current.getMonth()+1 ; 
+        var mm = current.getMonth() ; 
         var yyyy = current.getFullYear() ; 
         var hh = current.getHours() ; 
         var mi  = current.getMinutes() ; 
@@ -299,7 +319,7 @@ function time_checker() {
 
 time_checker() ; 
 
-send(409206, "stream" , "667041" , "topic" , "")
+//send(409206, "stream" , "667041" , "topic" , "")
 
 
 
