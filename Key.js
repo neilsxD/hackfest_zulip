@@ -3,6 +3,7 @@ var fs = require('fs');
 // Pass the path to your zuliprc file here.
 const config = { zuliprc: "zuliprc" };
 var clientData,Key;
+
 (async () => {
     const client = await zulipInit(config);
 
