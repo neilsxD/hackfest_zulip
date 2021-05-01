@@ -184,6 +184,21 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
 }
 
 
+var fs = require('fs');
+
+function ReadJsonFile(fileName){
+    //console.log(fileName);
+    fs.readFile(fileName, function(err, data) {
+            if(err) return 0 ;
+            var fileData=JSON.parse(data);
+            return  fileData; 
+            var len=fileData.length;
+            
+            for(var i=0;i<len;i++){
+                console.log(fileData[i].message);
+            }
+      });
+}
 
 function time_checker() {
         var current =  new Date();
@@ -232,27 +247,14 @@ function time_checker() {
             
         }
          
-        location = location +".txt"   ;
+        location = location +".json"   ;
         console.log(location ) ;
-
+        ReadJsonFile(location ) ;
         
         
 }
 
 
-var fs = require('fs');
-
-function ReadJsonFile(fileName){
-    //console.log(fileName);
-    fs.readFile(fileName, function(err, data) {
-            if(err) throw err;
-            var fileData=JSON.parse(data);
-            var len=fileData.length;
-            for(var i=0;i<len;i++){
-                console.log(fileData[i].message);
-            }
-      });
-}
 
 
 
