@@ -1,4 +1,0 @@
-[api]
-email=undefined
-key= addsdasasd 
-site=https://undefined.zulipchat.com
