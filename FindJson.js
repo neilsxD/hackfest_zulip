@@ -18,3 +18,5 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
       
     });
 }
+
+//findJson('Hello',123,'private',456,'Castle','01-05-2021_2016');
