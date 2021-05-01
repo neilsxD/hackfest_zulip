@@ -2,13 +2,10 @@ var fs = require('fs');
 
 const zulipInit = require("zulip-js");
 
-
-
 async function sends(message , sender_id , type , receiver_id , topic = null ){
     
     const config_id = await { zuliprc: sender_id +".txt" }; // the document will be in the form of the sender id
     const client = await   zulipInit(config_id);
-
 
     let params = {} ; 
     if(type == 'private' )
@@ -20,32 +17,16 @@ async function sends(message , sender_id , type , receiver_id , topic = null ){
         };
         console.log(await client.messages.send(params));
 
-    
-
-
     }else {
-
-
-
         params = {
             to: receiver_id  ,
             type: "stream",
             topic: topic,
             content: message,
         };
-        
      console.log(await client.messages.send(params));
-
-
     }
-
-
-
-
 }
-
-
-
 // Pass the path to your zuliprc file here.
 const config_bot = { zuliprc: "zuliprc" };
 
@@ -92,15 +73,8 @@ function pattern_register_bot(message_list) {
         
     }
     return 0 ; 
-
-    
 }
-
-
 var prevMsgData;
-
-
-
 function findJson(message,sender_id,type,receiver_id,topic,date_time){
 
     var text={sender_id:sender_id,receiver_id:receiver_id,message:message,type:type,topic:topic};
@@ -111,9 +85,12 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
     
     fs.readFile(date_time+'.json', function(err, data) {
         if(!err){
+            console.log(date_time) ; 
+
             prevData.push(JSON.parse(data)[0]);
         }
         prevData.push(text);
+        
 
         fs.writeFile(date_time+'.json',JSON.stringify(prevData), function (err) {
             if (err) throw err ;
@@ -122,9 +99,6 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
       
     });
 }
-
-
-
 
 // pattern for the message_schedule
  function pattern_schedule(message_list  ) {
@@ -164,8 +138,6 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
         //time to topic  > <--message-->
 
         console.log(message_true ) ; 
-        
-        
         var to =""  ; 
         var topic = "" ;
         var space = 0 ; 
@@ -174,39 +146,27 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
         var ignore = 0 ; 
 
         for(var itr =  0 ; itr< message_true.length ; itr++  )
-        {
-            // if it is a space 
-
-            if(space >=4 )
+        {   if(space >=4 )
             {
-                
                 message_send = message_send +  message_true[itr] ; 
-
-            }else
+           }else
             {
-                
                 if(message_true[itr] == ']')
                 {
                     ignore-- ;
- 
                     continue ;
                 }else if(message_true[itr] == '[')
                 {
                     ignore++ ; 
                     continue ;
-
                 }
                 if(ignore!= 0 )
                 continue ; 
-
-
-
                 if(message_true[itr] == ' ')
                     {
                         space++ ; 
                         continue  ;
                     }
-
                     if(message_true[itr] == '>')
                     {
                         space =4  ;
@@ -222,34 +182,14 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
                     }else if(space == 0 )
                     {
                         time = time + message_true[itr] ; 
-                    }
-
-                }
-
-             
-        }
-        
+                    } }}
         console.log(message_true) ; 
-
         var from = message_list.sender_id ; 
-
         var type = "" ; 
-
-        // SVGAElement_message(message , sender_id , type , receiver_id , topic , date-time)
         if(topic == "")
         type = "private" ; 
         else 
         type = "stream" ;
-       /* console.log(message_send) ;
-        console.log(message_list.sender_id) ;
-        console.log(type ) ;
-        console.log(message_list.recipient_id) ;
-        console.log(topic) ;
-        console.log(time ) ;
-        console.log(message_true ) ;
-         */
-        
-
         findJson(message_send , message_list.sender_id , type  ,to , topic , time ) ;
         
     }
@@ -262,7 +202,7 @@ var fs = require('fs');
 async  function ReadJsonFile(fileName){
     //console.log(fileName);
     fs.readFile(fileName, function(err, data) {
-            if(err) throw err ;
+            if(err) return 0  ;
             var fileData=JSON.parse(data);
             var len=fileData.length;
 //            console.log(fileData) ; 
@@ -328,28 +268,8 @@ function time_checker() {
         
 }
 
-
-
-var dict = {
-    "content": "message_schedule 11-12-2000-32-23 private-address topic> addsdasasd ",
-    "one": 1,
-    "sender_id":"sda"
-     };
-     var dict2 = {
-         "content": "/register_bot  addsdasasd ",
-         "one": 1,
-         "sender_id":"sda" ,
-         "sender_mail" : "asads" , 
-         "sender_realm_str" :"das" 
-          };
-
-
-    //pattern_schedule(dict ) ; 
-    //pattern_register_bot(dict2) ;
-
-    const { htmlToText } = require('html-to-text');
+const { htmlToText } = require('html-to-text');
 const { send } = require('process');
-    
     function extractContent(content){
         const text = htmlToText(content, {
             wordwrap: null
@@ -358,21 +278,29 @@ const { send } = require('process');
            return text;
     }
 
-
-
-
 (async () => {
     const client = await zulipInit(config_bot);
 
+        
+        var list_emails = await client.users.retrieve() ;
+        var list_email = list_emails.members ;
+        //console.log(list_emails ) ;
+
+        //console.log(list_email ) ;
 
         // check for the message 
-
+        if(1) // while 
+        {   
+          for( var  email_itr = 0 ; email_itr < list_email.length ; email_itr++ )
+        {
+            
+            console.log(list_email[email_itr].email) ;
         const readParams =  await {
             anchor: "newest",
             num_before: 100,
             num_after: 0,
             narrow: [
-                {operator: "sender", operand: "jayantanand123456789@gmail.com"}, // get all users 
+                {operator: "sender", operand: list_email[email_itr].email  }, // get all users 
                 {
                     "operator": "search",
                     "operand": "message_schedule "
@@ -386,39 +314,35 @@ const { send } = require('process');
             num_before: 100,
             num_after: 0,
             narrow: [
-                {operator: "sender", operand: "jayantanand123456789@gmail.com"}],
+                {operator: "sender", operand:   list_email[email_itr].email   }],
         };
         
-
-
-        if(1)
-        {
-            prevMsgData=await client.messages.retrieve(readParams);
+        
+        prevMsgData=await client.messages.retrieve(readParams);
             registration =await client.messages.retrieve(reg_parameter);
-           // console.log(registration.messages);
+            console.log(registration.messages);
             for( var i=0;i<registration.messages.length;i++)
             {
                 pattern_register_bot(registration.messages[i]) ;
             }
             
-         //   pattern_schedule(prevMsgData.messages[0 ])  ;
+            //pattern_schedule(prevMsgData.messages[0 ])  ;
 
             for(var i = 0 ; i < prevMsgData.messages.length  ; i++ )
             {
 
-      pattern_schedule(prevMsgData.messages[i]) ; 
+                pattern_schedule(prevMsgData.messages[i]) ; 
             }
             
-//            await console.log(prevMsgData.messages);
-            
-        time_checker() ; 
-
-            // generate the delay 
-            // wait 
+            time_checker() ; 
 
 
-        }                
-            
+        }
+
+    }
+        
+
+   
 })();
 
 
