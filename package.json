@@ -1,0 +1,24 @@
+{
+  "name": "hackfest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bot.js",
+  "dependencies": {
+    "firebase": "^8.4.3",
+    "zulip-js": "^2.0.9"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jayant-ism/hackfest_zulip.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jayant-ism/hackfest_zulip/issues"
+  },
+  "homepage": "https://github.com/jayant-ism/hackfest_zulip#readme"
+}

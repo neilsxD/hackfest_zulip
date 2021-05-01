@@ -9,4 +9,6 @@ const config = { zuliprc: "zuliprc" };
     // Get the profile of the user/bot that requests this endpoint,
     // which is `client` in this case:
     console.log(await client.users.me.getProfile());
+
+    
 })();
