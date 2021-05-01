@@ -1,5 +1,15 @@
 var fs = require('fs');
 
+function DeleteFile(date_time){
+    //console.log(date_time);
+    fs.unlink(date_time, function (err) {
+        if (err) console.log(err );
+        console.log('File deleted!');
+      });
+}
+
+
+
 const zulipInit = require("zulip-js");
 
 async function sends(message , sender_id , type , receiver_id , topic = null ){
@@ -76,7 +86,9 @@ function pattern_register_bot(message_list) {
 }
 var prevMsgData;
 function findJson(message,sender_id,type,receiver_id,topic,date_time){
-
+    if(date_time < current_time() )
+        return 0 ; 
+        
     var text={sender_id:sender_id,receiver_id:receiver_id,message:message,type:type,topic:topic};
     var prevData=[];
     
@@ -201,7 +213,7 @@ var fs = require('fs');
 
 async  function ReadJsonFile(fileName){
     //console.log(fileName);
-    fs.readFile(fileName, function(err, data) {
+    fs.readFile(fileName, function(err, data   ) {
             if(err) return 0  ;
             var fileData=JSON.parse(data);
             var len=fileData.length;
@@ -211,11 +223,12 @@ async  function ReadJsonFile(fileName){
             for(var i=0;i<len;i++){
                 sends(fileData[i].message , fileData[i].sender_id , fileData[i].type , fileData[i].receiver_id , fileData[i].topic ) ;
             }
-      });
-}
 
-function time_checker() {
-        var current =  new Date();
+      } );
+}
+function current_time()
+{
+    var current =  new Date();
         // dd-mm-yyyy-mm-hh
         var dd = current.getDate() ; 
         var mm = current.getMonth() + 1 ; 
@@ -260,10 +273,18 @@ function time_checker() {
             location = location +mi ; 
             
         }
+        return location ; 
+
+}
+
+function time_checker() {
+        
          
-        location = location +".json"   ;
+        location = current_time() +".json"   ;
         console.log(location ) ;
         ReadJsonFile(location ) ;
+        DeleteFile(location ) ;
+
         
         
 }
@@ -290,7 +311,8 @@ const { send } = require('process');
 
         // check for the message 
         if(1) // while 
-        {   
+        {  time_checker(1) ; 
+
           for( var  email_itr = 0 ; email_itr < list_email.length ; email_itr++ )
         {
             
@@ -334,8 +356,6 @@ const { send } = require('process');
                 pattern_schedule(prevMsgData.messages[i]) ; 
             }
             
-            time_checker() ; 
-
 
         }
 
