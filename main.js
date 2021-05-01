@@ -245,7 +245,7 @@ function time_checker() {
         var current =  new Date();
         // dd-mm-yyyy-mm-hh
         var dd = current.getDate() ; 
-        var mm = current.getMonth() ; 
+        var mm = current.getMonth()+1 ; 
         var yyyy = current.getFullYear() ; 
         var hh = current.getHours() ; 
         var mi  = current.getMinutes() ; 

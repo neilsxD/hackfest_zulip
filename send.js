@@ -3,7 +3,7 @@ const zulipInit = require("zulip-js");
 
 async function sends(message , sender_id , type , receiver_id , topic = null ){
     
-    const config_id = await { zuliprc: sender_id }; // the document will be in the form of the sender id
+    const config_id = await { zuliprc: sender_id}; // the document will be in the form of the sender id
     const client = await   zulipInit(config_id);
 
 
