@@ -11,7 +11,7 @@ const config = { zuliprc: "zuliprc" };
         to: "test_bot-bot",
         type: "stream",
         topic: "Castle",
-        content: "I come not, friends, to steal away your hearts.",
+        content: "I come not, friends, to steal away your hearts.--Akash",
     };
     console.log(await client.messages.send(params));
 
