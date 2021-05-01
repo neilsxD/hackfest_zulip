@@ -18,10 +18,6 @@ const config = { zuliprc: "download" };
     console.log(await client.messages.send(params));
 
 
-
-
-
-
     // Send a private message
     const user_id = 9;
     params = {
