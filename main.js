@@ -83,12 +83,16 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
 
 
 
-// pattern for the /message_schedule
+// pattern for the message_schedule
 async function pattern_schedule(message_list  ) {
+   // console.log(message_list) ; 
+
     messagesf = message_list.content ;
     message = messagesf ; 
-    // /message_schedule to topic time> <---message--->
-    value =    "/message_schedule "  ;
+    console.log(message) ; 
+
+    // message_schedule to topic time> <---message--->
+    value =    "message_schedule "  ;
     
     if( message.length >= value.length)
     {   var pos = 1 ;
@@ -97,17 +101,21 @@ async function pattern_schedule(message_list  ) {
         {   if(i < value.length)
             {   if(value[i] != message[i])
                 {
+                    
+                    console.log(value[i]) ;
+
                     pos = 0 ;
                     break  ;
                 }
             }else
             { message_true = message_true  + message[i] ; }
         }
+
         if(pos ==0 )
         return 0 ; 
 
         
-        // /message_schedule
+        // message_schedule
         // now the message will be in form of 
     
         //time to topic  > <--message-->
@@ -186,7 +194,7 @@ async function pattern_schedule(message_list  ) {
 }
 
 var dict = {
-    "content": "/message_schedule 11-12-2000-32-23 private-address topic> addsdasasd ",
+    "content": "message_schedule 11-12-2000-32-23 private-address topic> addsdasasd ",
     "one": 1,
     "sender_id":"sda"
      };
@@ -199,14 +207,18 @@ var dict = {
           };
 
 
-    pattern_schedule(dict ) ; 
-    pattern_register_bot(dict2) ;
+    //pattern_schedule(dict ) ; 
+    //pattern_register_bot(dict2) ;
+
+    function extractContent(s) {
+        var span = document.createElement('span');
+        span.innerHTML = s;
+        return span.textContent || span.innerText;
+      };
 
 
 
 
-
-    /*
 (async () => {
     const client = await zulipInit(config_bot);
 
@@ -221,7 +233,7 @@ var dict = {
                 {operator: "sender", operand: "jayantanand123456789@gmail.com"},
                 {
                     "operator": "search",
-                    "operand": "/message_schedule "
+                    "operand": "message_schedule "
                 },
                     ],
         };
@@ -233,10 +245,10 @@ var dict = {
             num_after: 0,
             narrow: [
                 {operator: "sender", operand: "jayantanand123456789@gmail.com"},
-                {
-                    "operator": "search",
-                    "operand": "/message_schedule "
-                },
+                //{
+                //    "operator": "search",
+                //    "operand": "message_schedule "
+                //},
                     ],
         };
         
@@ -248,11 +260,20 @@ var dict = {
             
             registration =await client.messages.retrieve(reg_parameter);
             
-            for( i in registration )
+            for( i in registration.messages )
             {
-            //    pattern_register_bot(registration) ;
+                 //    pattern_register_bot(i) ;
+                
             }
-            await console.log(prevMsgData.messages);
+            for(var i = 0 ; i < prevMsgData.messages.length  ; i++ )
+            {
+                      
+                console.log(extractContent(prevMsgData.messages[i].content   ) ) ;
+
+    //   pattern_schedule(prevMsgData.messages[i]) ; 
+            }
+            
+//            await console.log(prevMsgData.messages);
 
 
             // generate the delay 
@@ -264,9 +285,6 @@ var dict = {
 })();
 
 
-
-
-*/
 
 
 
