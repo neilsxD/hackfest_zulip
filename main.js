@@ -177,21 +177,100 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
         else 
         type = "stream" ; 
 
-        findJson(message , message_list.sender_id , type  ,message_list.recipient_id , topic , time ) ;
-         
-/*
-        var current = await new Date();
+        findJson(message_send , message_list.sender_id , type  ,message_list.recipient_id , topic , time ) ;
         
-        current.setDate = message[0]*10 + message[1] ; 
-        current.setmonth = message[4]*10 + message[5] ; 
-        current.setyear = message[7]*1000 + message[8]*100 + message[9]*10 + message[10] ; 
-        current.sethours = message[12]*10 + message[13] ; 
-        current.setminutes = message[15]*10 + message[16] ; 
-        
-  */    
     }
     
 }
+
+
+
+function time_checker() {
+        var current =  new Date();
+        // dd-mm-yyyy-mm-hh
+        var dd = current.getDate() ; 
+        var mm = current.getMonth() ; 
+        var yyyy = current.getFullYear() ; 
+        var hh = current.getHours() ; 
+        var mi  = current.getMinutes() ; 
+        
+        var location =  "" ;
+        if( (dd+"").length == 1)
+        {
+            location = location + "0" +dd +'-'; 
+        }else 
+        {
+            location = location +dd +'-' ; 
+            
+        }
+
+        if( (mm + "" ).length == 1)
+        {
+            location = location + "0" +mm +'-'; 
+        }else 
+        {
+            location = location +mm +'-' ; 
+            
+        }
+        
+        location = location + yyyy +'-' ;
+        
+        if( (hh+ "").length == 1)
+        {
+            location = location + "0" +hh +'-'; 
+        }else 
+        {
+            location = location +hh +'-' ; 
+            
+        }
+        if( (mi +"").length == 1)
+        {
+            location = location + "0" +mi; 
+        }else 
+        {
+            location = location +mi ; 
+            
+        }
+         
+        location = location +".txt"   ;
+        console.log(location ) ;
+
+        
+        
+}
+
+
+var fs = require('fs');
+
+function ReadJsonFile(fileName){
+    //console.log(fileName);
+    fs.readFile(fileName, function(err, data) {
+            if(err) throw err;
+            var fileData=JSON.parse(data);
+            var len=fileData.length;
+            for(var i=0;i<len;i++){
+                console.log(fileData[i].message);
+            }
+      });
+}
+
+
+
+
+time_checker() ; 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 var dict = {
     "content": "message_schedule 11-12-2000-32-23 private-address topic> addsdasasd ",
@@ -221,6 +300,9 @@ var dict = {
     }
 
 
+
+    /*
+
 (async () => {
     const client = await zulipInit(config_bot);
 
@@ -246,12 +328,7 @@ var dict = {
             num_before: 100,
             num_after: 0,
             narrow: [
-                {operator: "sender", operand: "jayantanand123456789@gmail.com"},
-                //{
-                //    "operator": "search",
-                //    "operand": "message_schedule "
-                //},
-                    ],
+                {operator: "sender", operand: "jayantanand123456789@gmail.com"}],
         };
         
 
@@ -259,18 +336,14 @@ var dict = {
         if(1)
         {
             prevMsgData=await client.messages.retrieve(readParams);
-            
             registration =await client.messages.retrieve(reg_parameter);
-            
            // console.log(registration.messages);
             for( var i=0;i<registration.messages.length;i++)
             {
                 pattern_register_bot(registration.messages[i]) ;
-                
             }
             for(var i = 0 ; i < prevMsgData.messages.length  ; i++ )
             {
-                      
                 pattern_schedule(prevMsgData.messages[i])  ;
 
     //   pattern_schedule(prevMsgData.messages[i]) ; 
@@ -292,3 +365,6 @@ var dict = {
 
 
 
+
+
+*/
