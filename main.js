@@ -5,9 +5,14 @@ function DeleteFile(date_time){
     fs.unlink(date_time, function (err) {
         if (err) console.log(err );
         console.log('File deleted!');
+        set1.delete(locations ) ; 
+
+
+
       });
 }
 
+const set1 = new Set();
 
 
 const zulipInit = require("zulip-js");
@@ -25,7 +30,7 @@ async function sends(message , sender_id , type , receiver_id , topic = null ){
             type: "private",
             content: message ,
         };
-        console.log(await client.messages.send(params));
+        //console.log(await client.messages.send(params));
 
     }else {
         params = {
@@ -34,7 +39,7 @@ async function sends(message , sender_id , type , receiver_id , topic = null ){
             topic: topic,
             content: message,
         };
-     console.log(await client.messages.send(params));
+     //console.log(await client.messages.send(params));
     }
 }
 // Pass the path to your zuliprc file here.
@@ -44,7 +49,7 @@ function fileCreator(emailId,Key,userId, urls){
     
     // Get the 100 last messages sent by "iago@zulip.com" to the stream "Verona"
     //clientData=await client.messages.retrieve(readParams);
-    //console.log(clientData.messages[0].sender_id);
+    ////console.log(clientData.messages[0].sender_id);
     
     fs.writeFile(userId+'.txt','[api]\nemail='+emailId+'\nkey='+Key +'\nsite=https://'+urls +'.zulipchat.com',
              function (err) {
@@ -88,7 +93,7 @@ var prevMsgData;
 function findJson(message,sender_id,type,receiver_id,topic,date_time){
     if(date_time < current_time() )
         return 0 ; 
-        
+
     var text={sender_id:sender_id,receiver_id:receiver_id,message:message,type:type,topic:topic};
     var prevData=[];
     
@@ -97,7 +102,7 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
     
     fs.readFile(date_time+'.json', function(err, data) {
         if(!err){
-            console.log(date_time) ; 
+            //console.log(date_time) ; 
 
             prevData.push(JSON.parse(data)[0]);
         }
@@ -106,7 +111,7 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
 
         fs.writeFile(date_time+'.json',JSON.stringify(prevData), function (err) {
             if (err) throw err ;
-            console.log('Saved!');
+            //console.log('Saved!');
       });
       
     });
@@ -149,7 +154,7 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
     
         //time to topic  > <--message-->
 
-        console.log(message_true ) ; 
+        // console.log(message_true ) ; 
         var to =""  ; 
         var topic = "" ;
         var space = 0 ; 
@@ -195,7 +200,7 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
                     {
                         time = time + message_true[itr] ; 
                     } }}
-        console.log(message_true) ; 
+        ////console.log(message_true) ; 
         var from = message_list.sender_id ; 
         var type = "" ; 
         if(topic == "")
@@ -203,7 +208,8 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
         else 
         type = "stream" ;
         findJson(message_send , message_list.sender_id , type  ,to , topic , time ) ;
-        
+                    set1.add(time ) ; 
+
     }
     
 }
@@ -212,12 +218,12 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
 var fs = require('fs');
 
 async  function ReadJsonFile(fileName){
-    //console.log(fileName);
+    ////console.log(fileName);
     fs.readFile(fileName, function(err, data   ) {
             if(err) return 0  ;
             var fileData=JSON.parse(data);
             var len=fileData.length;
-//            console.log(fileData) ; 
+//            //console.log(fileData) ; 
 
 
             for(var i=0;i<len;i++){
@@ -273,6 +279,7 @@ function current_time()
             location = location +mi ; 
             
         }
+        
         return location ; 
 
 }
@@ -280,11 +287,19 @@ function current_time()
 function time_checker() {
         
          
-        location = current_time() +".json"   ;
-        console.log(location ) ;
-        ReadJsonFile(location ) ;
-        DeleteFile(location ) ;
+        locations = current_time() ;
+        console.log(locations) ;
 
+        if(set1.has(locations) )
+        {
+            location = locations  +".json"   ;
+            //console.log(location ) ;
+            ReadJsonFile(location ) ;
+            DeleteFile(location ) ;
+
+        } 
+        
+        
         
         
 }
@@ -305,18 +320,23 @@ const { send } = require('process');
         
         var list_emails = await client.users.retrieve() ;
         var list_email = list_emails.members ;
-        //console.log(list_emails ) ;
+        ////console.log(list_emails ) ;
 
-        //console.log(list_email ) ;
+        ////console.log(list_email ) ;
 
-        // check for the message 
+        // check for the message
+        var itsf = 0 ; 
         if(1) // while 
-        {  time_checker(1) ; 
-
-          for( var  email_itr = 0 ; email_itr < list_email.length ; email_itr++ )
+        {   
+            if(1)
+            {
+                time_checker(1) ;
+            }
+            
+        for( var  email_itr = 0 ; email_itr < list_email.length ; email_itr++ )
         {
             
-            console.log(list_email[email_itr].email) ;
+            //console.log(list_email[email_itr].email) ;
         const readParams =  await {
             anchor: "newest",
             num_before: 100,
@@ -342,7 +362,7 @@ const { send } = require('process');
         
         prevMsgData=await client.messages.retrieve(readParams);
             registration =await client.messages.retrieve(reg_parameter);
-            console.log(registration.messages);
+            //console.log(registration.messages);
             for( var i=0;i<registration.messages.length;i++)
             {
                 pattern_register_bot(registration.messages[i]) ;
@@ -352,6 +372,8 @@ const { send } = require('process');
 
             for(var i = 0 ; i < prevMsgData.messages.length  ; i++ )
             {
+                console.log("sad") ;
+
 
                 pattern_schedule(prevMsgData.messages[i]) ; 
             }
@@ -364,6 +386,8 @@ const { send } = require('process');
 
    
 })();
+
+        
 
 
 
