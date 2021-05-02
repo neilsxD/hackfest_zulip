@@ -1,4 +1,4 @@
-Team Inquistors :-
+Team :- Inquisitors
 Topic :- Schedular bot using zulip API
 -------------------------------------------------------------------------
 Command used 
