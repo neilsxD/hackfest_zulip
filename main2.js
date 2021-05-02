@@ -3,8 +3,8 @@ var fs = require('fs');
 function DeleteFile(date_time){
     //console.log(date_time);
     fs.unlink(date_time, function (err) {
-        if (err) return 0 ;
-      //  console.log('File deleted!');
+        if (err) console.log(err );
+        console.log('File deleted!');
       });
 }
 
@@ -25,7 +25,7 @@ async function sends(message , sender_id , type , receiver_id , topic = null ){
             type: "private",
             content: message ,
         };
-     console.log(await client.messages.send(params));
+        console.log(await client.messages.send(params));
 
     }else {
         params = {
@@ -49,7 +49,7 @@ function fileCreator(emailId,Key,userId, urls){
     fs.writeFile(userId+'.txt','[api]\nemail='+emailId+'\nkey='+Key +'\nsite=https://'+urls +'.zulipchat.com',
              function (err) {
         if (err) throw err;
-     //   console.log('Saved!');
+        console.log('Saved!');
       });
 }
 
@@ -85,32 +85,9 @@ function pattern_register_bot(message_list) {
     return 0 ; 
 }
 var prevMsgData;
-function vaields(datetime)
-{
-    value = current_time() ; 
-    for(itr = 0 ; itr < value.length ;itr++ )
-    {
-        if(value[itr] >  datetime[itr])
-        {   
-      //      console.log(datetime) ;
-
-        //    console.log(value) ;
-         //   console.log(itr) ; 
-
-            return 1 ; 
-        }
-
-    }
-    return 1 ; 
-
-}
-
 function findJson(message,sender_id,type,receiver_id,topic,date_time){
-
-
-    //console.log(date_time) ;
-    //console.log("preces") ; 
-
+   // if(date_time < current_time() )
+//     return 0 ; 
         
     var text={sender_id:sender_id,receiver_id:receiver_id,message:message,type:type,topic:topic};
     var prevData=[];
@@ -120,7 +97,7 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
     
     fs.readFile(date_time+'.json', function(err, data) {
         if(!err){
-           // console.log(date_time) ; 
+            console.log(date_time) ; 
 
             prevData.push(JSON.parse(data)[0]);
         }
@@ -129,7 +106,7 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
 
         fs.writeFile(date_time+'.json',JSON.stringify(prevData), function (err) {
             if (err) throw err ;
-        //    console.log('Saved!');
+            console.log('Saved!');
       });
       
     });
@@ -168,7 +145,7 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
 
         
         
-   //     console.log(message_true ) ; 
+        console.log(message_true ) ; 
         var to =""  ; 
         var topic = "" ;
         var space = 0 ; 
@@ -214,7 +191,7 @@ function findJson(message,sender_id,type,receiver_id,topic,date_time){
                     {
                         time = time + message_true[itr] ; 
                     } }}
-       // console.log(message_true) ; 
+        console.log(message_true) ; 
         var from = message_list.sender_id ; 
         var type = "" ; 
         if(topic == "")
@@ -240,8 +217,6 @@ async  function ReadJsonFile(fileName){
 
 
             for(var i=0;i<len;i++){
-                console.log("sending") ;
-
                 sends(fileData[i].message , fileData[i].sender_id , fileData[i].type , fileData[i].receiver_id , fileData[i].topic ) ;
             }
 
@@ -302,9 +277,9 @@ function time_checker() {
         
          
         location = current_time() +".json"   ;
-      //  console.log(location ) ;
+        //console.log(location ) ;
         ReadJsonFile(location ) ;
-       DeleteFile(location ) ;
+  //      DeleteFile(location ) ;
 
         
         
@@ -320,81 +295,15 @@ const { send } = require('process');
            return text;
     }
 
-(async () => {
-    const client = await zulipInit(config_bot);
-
-        
-        var list_emails = await client.users.retrieve() ;
-        var list_email = list_emails.members ;
-        //console.log(list_emails ) ;
-
-        //console.log(list_email ) ;
-
-        // check for the message 
-        var sets = new Set() ; 
-
-        while(1) // while 
-        {
-         
-
-        const readParams =  await {
-            anchor: "newest",
-            num_before: 1,
-            num_after: 0,
-            narrow: [
-                {operator: "sender", operand: "jayantanand123456789@gmail.com"  }, // get all users 
-                {
-                    "operator": "search",
-                    "operand": "message_schedule "
-                },
-                    ],
-        };
-
-        
-        const reg_parameter =  await {
-            anchor: "newest",
-            num_before: 1,
-            num_after: 0,
-            narrow: [
-                {operator: "sender", operand:   "jayantanand123456789@gmail.com"   }],
-        };
-        
-        
-        prevMsgData=await client.messages.retrieve(readParams);
-            registration =await client.messages.retrieve(reg_parameter);
-      //      console.log(registration.messages);
-            for( var i=0;i<registration.messages.length;i++)
-            {
-                pattern_register_bot(registration.messages[i]) ;
-            }
-            
-            //pattern_schedule(prevMsgData.messages[0 ])  ;
-
-            for(var i = 0 ; i < prevMsgData.messages.length  ; i++ )
-            {
-                if( sets.has(prevMsgData.messages[i].id)  )
-                break  ; 
-
-                sets.add(prevMsgData.messages[i].id) ;
-                console.log(prevMsgData.messages[i].id) ;
-                pattern_schedule(prevMsgData.messages[i]) ; 
-            }
-        
-            
-            time_checker() ;
 
 
 
+while(1)
+{
+    
+    time_checker() ; 
 
-    }
-
-        
-
-   
-})();
-
-
-
+}
 
 
 
