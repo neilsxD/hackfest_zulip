@@ -32,5 +32,7 @@ We may schedule a private message or a stream:-
 	eg:-
 	message_schedule 02-05-2021-04-46 test_bot-bot Castle > Hey guys how is the project going on!
 _____________________________________________________________________________________________________
-The demo is shown https://drive.google.com/file/d/1toR8BsSXFG8u294q546PHPAMHshp1nXG/view?usp=sharing . (please download the video for preview in better quality) 
+The demo can be found here :- https://www.youtube.com/watch?v=SvTMxhX1Fto  
+
+(please download the video for preview in better quality) 
 All the code required to run this bot can be found https://github.com/jayant-ism/hackfest_zulip/tree/master.
