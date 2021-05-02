@@ -1,5 +1,5 @@
 Team :- Inquisitors
-Topic :- Schedular bot using zulip API
+Project:- Scheduler bot using zulip API
 -------------------------------------------------------------------------
 Command used 
 
